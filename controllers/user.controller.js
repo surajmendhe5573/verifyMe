@@ -51,5 +51,15 @@ const Signin= async(req, res)=>{
     }
 }
 
+const getAllUsers= async(req, res)=>{
+    try {
+        const users= await User.find({}, '-password');  // Exclude the password field
+        res.status(200).json({message: "Users retrieved successfully", users});
+        
+    } catch (error) {
+        res.status(5000).json({message:"Internal server error"});
+    }
+}
 
-module.exports = {Signup, Signin};
+
+module.exports = {Signup, Signin, getAllUsers};

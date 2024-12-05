@@ -13,7 +13,7 @@ app.get('/', (req,res)=>{{
     res.send('Jai Shree Ram');
 }});
 
-app.use('/api/user', require('./routes/User'));
+app.use('/api/users', require('./routes/User'));
 
 app.listen(port, ()=>{
     console.log(`server is running on http://localhost:${port}`); 
