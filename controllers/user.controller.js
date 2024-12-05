@@ -61,5 +61,28 @@ const getAllUsers= async(req, res)=>{
     }
 }
 
+// Update User Function
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params; // Extract user ID from URL parameters
+        const { username, email, password } = req.body;
 
-module.exports = {Signup, Signin, getAllUsers};
+        const updates = {};
+        if (username) updates.username = username;
+        if (email) updates.email = email;
+        if (password) updates.password = await bcrypt.hash(password, 10); // Hash the new password if provided
+
+        const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({ message: "User updated successfully", updatedUser });
+    } catch (error) {
+        console.error('Update User Error:', error);
+        res.status(500).json({ message: "Internal server error", error });
+    }
+};
+
+module.exports = {Signup, Signin, getAllUsers, updateUser};
