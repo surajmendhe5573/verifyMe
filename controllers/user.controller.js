@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const userModel = require('../models/user.model');
 
 const Signup = async (req, res) => {
     try {
@@ -61,7 +62,7 @@ const getAllUsers= async(req, res)=>{
     }
 }
 
-// Update User Function
+// Update User 
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params; // Extract user ID from URL parameters
@@ -85,4 +86,21 @@ const updateUser = async (req, res) => {
     }
 };
 
-module.exports = {Signup, Signin, getAllUsers, updateUser};
+// Delete User
+const deleteUser= async(req, res)=>{
+    try {
+        const {id}= req.params;
+        const deletedUser= await User.findByIdAndDelete(id);
+
+        if(!deletedUser){
+            return res.status(404).json({message: "User not found"});
+        }
+
+        res.status(200).json({message: "User deleted successfully", deletedUser});
+
+    } catch (error) {
+        res.status(200).json({message: "Internal server error", error});
+    }
+}
+
+module.exports = {Signup, Signin, getAllUsers, updateUser, deleteUser};
